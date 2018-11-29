@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+
+broadcast chan halt,measure,front,wait,back,right,left,update,MCtoM_F,MCtoM_B,MCtoM_L,MCtoM_R,MtoW_F,continue,gyroSig,MtoW_R,MtoW_B,MtoW_L;
+
+//measure : to start measuring data(gyroscope).
+//halt : the system stops.
+//front : move front.
+//back : mve back.
+//right : turn right.
+//left : turn left.
+//update : update location.</declaration>
+	<template>
+		<name x="5" y="5">Template</name>
+		<declaration>// Place local declarations here.
+clock x,p;</declaration>
+		<location id="id0" x="-314" y="119">
+			<name x="-348" y="136">UpdateMap</name>
+		</location>
+		<location id="id1" x="-306" y="-144">
+			<name x="-314" y="-178">RecordPath</name>
+		</location>
+		<location id="id2" x="-459" y="-25">
+			<name x="-493" y="0">TurnLeft</name>
+			<label kind="invariant" x="-493" y="-17">x&lt;=31</label>
+		</location>
+		<location id="id3" x="-246" y="-17">
+			<name x="-246" y="-8">TurnRight</name>
+			<label kind="invariant" x="-263" y="8">x&lt;=16</label>
+		</location>
+		<location id="id4" x="-382" y="-25">
+			<name x="-416" y="-51">MoveBack</name>
+			<label kind="invariant" x="-416" y="-17">x&lt;=25</label>
+		</location>
+		<location id="id5" x="-153" y="-25">
+			<name x="-170" y="-17">MoveFront</name>
+			<label kind="invariant" x="-136" y="-34">x&lt;=5</label>
+		</location>
+		<location id="id6" x="-153" y="-187">
+			<name x="-163" y="-221">start</name>
+			<label kind="invariant" x="-136" y="-204">x&lt;=1</label>
+		</location>
+		<location id="id7" x="-459" y="-187">
+			<name x="-476" y="-221">idle</name>
+		</location>
+		<init ref="id7"/>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-340" y="-34">continue?</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-425" y="42">x&lt;=28</label>
+			<label kind="synchronisation" x="-391" y="59">left!</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-374" y="25">x&lt;=22</label>
+			<label kind="synchronisation" x="-357" y="42">back!</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-280" y="51">x&lt;=13</label>
+			<label kind="synchronisation" x="-289" y="68">right!</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-408" y="-110">x&lt;=33</label>
+			<label kind="synchronisation" x="-425" y="-93">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-365" y="-85">x&lt;=30</label>
+			<label kind="synchronisation" x="-365" y="-68">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-297" y="-102">x&lt;=20</label>
+			<label kind="synchronisation" x="-289" y="-85">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-238" y="-110">x&lt;=10</label>
+			<label kind="synchronisation" x="-229" y="-93">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-501" y="-144">x&lt;=35</label>
+			<label kind="synchronisation" x="-493" y="-127">halt!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-153" y="-144">x&lt;=2</label>
+			<label kind="synchronisation" x="-153" y="-127">front!</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="-357" y="-212">measure!</label>
+			<label kind="assignment" x="-348" y="-221">x:=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Template3</name>
+		<location id="id8" x="-459" y="-289">
+			<name x="-493" y="-323">LeftToMotor</name>
+		</location>
+		<location id="id9" x="-467" y="-102">
+			<name x="-510" y="-85">BackToMotor</name>
+		</location>
+		<location id="id10" x="-238" y="-195">
+			<name x="-263" y="-229">RightToMotor</name>
+		</location>
+		<location id="id11" x="-229" y="-289">
+			<name x="-212" y="-298">FrontToMotor</name>
+		</location>
+		<location id="id12" x="-314" y="-102">
+			<name x="-348" y="-85">RightFromAlgo</name>
+		</location>
+		<location id="id13" x="-561" y="-195">
+			<name x="-620" y="-229">BackFromAlgo</name>
+		</location>
+		<location id="id14" x="-399" y="-195">
+			<name x="-374" y="-212">Wait</name>
+		</location>
+		<location id="id15" x="-306" y="-340">
+			<name x="-314" y="-375">FrontFromAlgo</name>
+		</location>
+		<location id="id16" x="-331" y="-289">
+			<name x="-374" y="-323">LeftFromAlgo</name>
+		</location>
+		<location id="id17" x="-399" y="-399">
+			<name x="-409" y="-433">idle</name>
+		</location>
+		<init ref="id17"/>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="-459" y="-357">halt?</label>
+			<nail x="-425" y="-348"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-459" y="-229">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="-425" y="-289">MCtoM_L!</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-433" y="-153">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-569" y="-144">MCtoM_B!</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-340" y="-195">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="-280" y="-144">MCtoM_R!</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-323" y="-246">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-280" y="-340">MCtoM_F!</label>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="-399" y="-357">halt?</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-493" y="-254">left?</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="-501" y="-195">back?</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-374" y="-127">right?</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="-357" y="-399">front?</label>
+		</transition>
+	</template>
+	<template>
+		<name>Template5</name>
+		<location id="id18" x="-773" y="-391">
+			<name x="-807" y="-374">UpdateMap</name>
+		</location>
+		<location id="id19" x="-646" y="-493">
+			<name x="-697" y="-484">ReceivedUpdateSig</name>
+		</location>
+		<location id="id20" x="-773" y="-493">
+			<name x="-799" y="-536">Recieving</name>
+		</location>
+		<location id="id21" x="-943" y="-493">
+			<name x="-953" y="-527">idle</name>
+		</location>
+		<init ref="id21"/>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id21"/>
+			<label kind="synchronisation" x="-875" y="-433">halt?</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id21"/>
+			<label kind="synchronisation" x="-790" y="-603">halt?</label>
+			<nail x="-680" y="-518"/>
+			<nail x="-773" y="-587"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id20"/>
+			<label kind="synchronisation" x="-790" y="-450">continue!</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id18"/>
+			<label kind="synchronisation" x="-714" y="-442">wait!</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id21"/>
+			<label kind="synchronisation" x="-849" y="-484">halt?</label>
+			<nail x="-841" y="-459"/>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="-731" y="-510">update?</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id20"/>
+			<label kind="synchronisation" x="-883" y="-518">measure?</label>
+			<nail x="-841" y="-527"/>
+		</transition>
+	</template>
+	<template>
+		<name>Template4</name>
+		<declaration>clock z;</declaration>
+		<location id="id22" x="-102" y="-170">
+			<name x="-144" y="-204">SendMUSignal</name>
+		</location>
+		<location id="id23" x="51" y="-85">
+			<name x="25" y="-119">UpdateLocation</name>
+		</location>
+		<location id="id24" x="-102" y="-85">
+			<name x="-93" y="-110">Measuring</name>
+		</location>
+		<location id="id25" x="-272" y="-85">
+			<name x="-282" y="-119">idle</name>
+		</location>
+		<init ref="id25"/>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="-178" y="-170">halt?</label>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="-110" y="-8">halt?</label>
+			<nail x="-102" y="-8"/>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id24"/>
+			<label kind="synchronisation" x="-110" y="-153">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id22"/>
+			<label kind="synchronisation" x="-25" y="-144">update!</label>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id23"/>
+			<label kind="synchronisation" x="-42" y="-85">gyroSig?</label>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="-187" y="-68">halt?</label>
+			<nail x="-187" y="-68"/>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id24"/>
+			<label kind="synchronisation" x="-212" y="-110">measure?</label>
+			<nail x="-187" y="-110"/>
+		</transition>
+	</template>
+	<template>
+		<name>Template1</name>
+		<declaration>clock y;</declaration>
+		<location id="id26" x="-161" y="-25">
+			<name x="-203" y="-16">LeftToWheels</name>
+		</location>
+		<location id="id27" x="-119" y="34">
+			<name x="-204" y="42">BackToWheels</name>
+		</location>
+		<location id="id28" x="144" y="102">
+			<name x="102" y="119">RightToWheels</name>
+		</location>
+		<location id="id29" x="212" y="-42">
+			<name x="202" y="-76">FrontToWheels</name>
+		</location>
+		<location id="id30" x="51" y="-34">
+			<name x="59" y="-59">Wait</name>
+		</location>
+		<location id="id31" x="-34" y="-102">
+			<name x="-68" y="-136">LeftFromMC</name>
+		</location>
+		<location id="id32" x="221" y="17">
+			<name x="195" y="-17">RightFromMC</name>
+		</location>
+		<location id="id33" x="-51" y="102">
+			<name x="-85" y="119">BackFromMC</name>
+		</location>
+		<location id="id34" x="144" y="-110">
+			<name x="136" y="-144">FrontFromMC</name>
+		</location>
+		<location id="id35" x="51" y="-187">
+			<name x="26" y="-229">idle</name>
+		</location>
+		<init ref="id35"/>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id35"/>
+			<label kind="synchronisation" x="-102" y="-178">halt?</label>
+			<nail x="-102" y="-153"/>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id35"/>
+			<label kind="synchronisation" x="51" y="-119">halt?</label>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id32"/>
+			<label kind="synchronisation" x="110" y="-17">MCtoM_R?</label>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id30"/>
+			<label kind="synchronisation" x="-102" y="-51">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id31"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="-127" y="-85">MtoW_L!</label>
+		</transition>
+		<transition>
+			<source ref="id33"/>
+			<target ref="id27"/>
+			<label kind="synchronisation" x="-136" y="76">MtoW_B!</label>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id30"/>
+			<label kind="synchronisation" x="-68" y="-8">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id28"/>
+			<target ref="id30"/>
+			<label kind="synchronisation" x="85" y="25">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id32"/>
+			<target ref="id28"/>
+			<label kind="synchronisation" x="161" y="42">MtoW_R!</label>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id30"/>
+			<label kind="synchronisation" x="153" y="-59">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id34"/>
+			<target ref="id29"/>
+			<label kind="synchronisation" x="153" y="-93">MtoW_F!</label>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id31"/>
+			<label kind="synchronisation" x="-34" y="-85">MCtoM_L?</label>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id33"/>
+			<label kind="synchronisation" x="-17" y="17">MCtoM_B?</label>
+		</transition>
+		<transition>
+			<source ref="id35"/>
+			<target ref="id34"/>
+			<label kind="synchronisation" x="68" y="-161">MCtoM_F?</label>
+		</transition>
+		<transition>
+			<source ref="id31"/>
+			<target ref="id35"/>
+			<label kind="synchronisation" x="-8" y="-170">halt?</label>
+		</transition>
+	</template>
+	<template>
+		<name>Template2</name>
+		<declaration>clock z;</declaration>
+		<location id="id36" x="-178" y="-280">
+			<name x="-195" y="-314">SendSigToGyro</name>
+		</location>
+		<location id="id37" x="-391" y="-459">
+			<name x="-425" y="-493">RotateRight</name>
+		</location>
+		<location id="id38" x="-391" y="-382">
+			<name x="-425" y="-416">RotateLeft</name>
+		</location>
+		<location id="id39" x="-391" y="-110">
+			<name x="-416" y="-93">Backward</name>
+		</location>
+		<location id="id40" x="-391" y="-187">
+			<name x="-416" y="-221">Forward</name>
+		</location>
+		<location id="id41" x="-612" y="-280">
+			<name x="-629" y="-314">idle</name>
+		</location>
+		<init ref="id41"/>
+		<transition>
+			<source ref="id36"/>
+			<target ref="id41"/>
+			<label kind="synchronisation" x="-408" y="-255">halt?</label>
+			<nail x="-391" y="-238"/>
+		</transition>
+		<transition>
+			<source ref="id38"/>
+			<target ref="id36"/>
+			<label kind="synchronisation" x="-331" y="-357">gyroSig!</label>
+		</transition>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id36"/>
+			<label kind="synchronisation" x="-331" y="-170">gyroSig!</label>
+		</transition>
+		<transition>
+			<source ref="id40"/>
+			<target ref="id36"/>
+			<label kind="synchronisation" x="-323" y="-238">gyroSig!</label>
+		</transition>
+		<transition>
+			<source ref="id37"/>
+			<target ref="id36"/>
+			<label kind="synchronisation" x="-314" y="-416">gyroSig!</label>
+		</transition>
+		<transition>
+			<source ref="id36"/>
+			<target ref="id41"/>
+			<label kind="synchronisation" x="-408" y="-297">wait?</label>
+		</transition>
+		<transition>
+			<source ref="id38"/>
+			<target ref="id41"/>
+			<label kind="synchronisation" x="-459" y="-323">halt?</label>
+			<nail x="-459" y="-306"/>
+		</transition>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id37"/>
+			<label kind="synchronisation" x="-535" y="-408">MtoW_R?</label>
+		</transition>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id38"/>
+			<label kind="synchronisation" x="-518" y="-357">MtoW_L?</label>
+		</transition>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id39"/>
+			<label kind="synchronisation" x="-518" y="-187">MtoW_B?</label>
+		</transition>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id40"/>
+			<label kind="synchronisation" x="-501" y="-229">MtoW_F?</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+MotorController = Template3();
+Motor = Template1();
+Wheels= Template2();
+Algorithm= Template();
+Gyroscope= Template4();
+MapUpdate= Template5();
+
+// List one or more processes to be composed into a system.
+system MotorController,Motor,Gyroscope,Algorithm,Wheels,MapUpdate;
+    </system>
+	<queries>
+		<query>
+			<formula>A[] !deadlock
+			</formula>
+			<comment>
+			</comment>
+		</query>
+	</queries>
+</nta>
